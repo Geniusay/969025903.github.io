@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='深入了解InnoDB作用原理，看完此文会让你更加爱上Redis，放弃MYSQL'><title>InnoDB</title>
+
+<link rel='canonical' href='https://geniusBlog.github.io/p/innodb/'>
+
+<link rel="stylesheet" href="/scss/style.min.ac77dcf8b111b51da39a92990f431923f210f3876d85798a2125667f96dc33a4.css"><meta property='og:title' content='InnoDB'>
+<meta property='og:description' content='深入了解InnoDB作用原理，看完此文会让你更加爱上Redis，放弃MYSQL'>
+<meta property='og:url' content='https://geniusBlog.github.io/p/innodb/'>
+<meta property='og:site_name' content='Genius'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Mysql' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='InnoDB' /><meta property='article:published_time' content='2022-09-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-09-08T00:00:00&#43;00:00'/><meta property='og:image' content='https://geniusBlog.github.io/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w.jpg' />
+<meta name="twitter:site" content="@genius">
+    <meta name="twitter:creator" content="@genius"><meta name="twitter:title" content="InnoDB">
+<meta name="twitter:description" content="深入了解InnoDB作用原理，看完此文会让你更加爱上Redis，放弃MYSQL"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://geniusBlog.github.io/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w.jpg' />
+    <link rel="shortcut icon" href="/img/Genius.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Genius_hua95d8fe85c65c73f01d0951a42335663_30321_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🎬</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Genius</a></h1>
+            <h2 class="site-description">&#34;现在我用沉静的目光见到 恰是那台机器脉冲的颤跳&#34;</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/sbg-genius'
+                        target="_blank"
+                        title="Gitee"
+                    >
+                        
+                        
+                            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">  <image id="image0" width="24" height="24" x="0" y="0"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACZ1BMVEUAAAD/AADcABHbABPZ
+ABLZABPZABPbABH/AADZABPbABPZABKqAADZABHaABPZBBbaBRjaBRjZBRfbBhjZBhfYABLZARTZ
+ABDWAADWAADWAADYABXbAA/dABLbABLaARPnXGjsgInsgYrhLDvcAAvbAxjfAA3ZABLeABLZAhPY
+AAvjTFb409bsgInaAADbBhjZABPXAAfthpDVAADaABPdABLcABPZAA/64OLzsLbXAAfdAxXZAxbX
+AAHnX2vZABDaABPYABHeABLaBRfZABHZABLaBBjXAAjZAhXaBBfbBRjYABPZBRjlU2HXAATZAxXd
+BBf3yczZARHsfonZABTsgov51tnjS1bYAArZARTbAAvhLDzmWWXaARTaABLYABTYABLkABPdABLb
+ABLZABPmABPZARPaBRfnBRjbABPWAAPVAADZAADZAAvWAAfaDyHqeYLsf4nrfoj////lWWT9/Pzn
+BRncGCb++/v9/v31wMXysLbzs7jysrfzsbbiRFL+/f3++/z+/v7mY27ZDRfZBxraCBraBxnaBxrZ
+BxnZBRjUAADqeoT2zM/aCx3XAAvWAAbXAAnXAAjXAAfYABT0vsLaECHWAQjgO0nvlp3vmJ/umJ/v
+maDgOEf1wMTbEyTshI7shY7+/Pz98/T++vrrfYfaECLWAAjvlp7xp6788fL9+/v0vcHZCRzYABDX
+AArVAAHZBhj2ztH+///qd4H2y8/cGSrYAxLZCBrkU1/99/f+/f7sfoj9+fn1wcbyr7Tysbf0vML8
+9vb+/P3ZEBroBBj++fn98vP++fr89vfgOkfqeILaDR+weo5OAAAAYXRSTlMAAixptNjyaQEok/ID
+WOX7/f775Vhw+f3+/flvVP3+/P7+/P79VCjn/vz+/v78/ueT/v75Ke/8/f7+/fz7/v7+/vv9/f3Y
+/v7+/f3y+/7++/z+/f75/P7+/vz9/v78/nBvjqLsXwAAAAFiS0dEc0EJPc4AAAAHdElNRQfmCQgN
+IifODXi5AAAB2ElEQVQoz2NgAAJGBgYmZhZWNjZWFnYmMBcCOBg4ubgTk5JTUpKTErm5OIECYMDD
+wMuXmsYvIAgEAkLpGcIiQCGwetHMJDHxLAmJ7GwglpTKyZUG6eFgkJGVk8/LVygoLCosLFQsKlJS
+VlEFyaipa2hqaesUI4Cunr4a0AaDVDHDktLiUoSEkXGZAQ+DiamZeblFcUVlVXUNCNTWWdZbWZua
+MDAn2tjaNTQ2Nbe0trV3tLd3tnXZOzgmMjOwODl39zQ19fb190+YOAkIJk7un+LixMLgmukmUdhU
+PHXa9BkzZ82eM2f2rJlz3T0yXRnYUjyzi4qb5s3vXgCzfGG3VwobUEIgu7C4GC6xaPGSpdmeKd5A
+owQlCoE6li0HGjVnxcpVq5sKJdyARrE4CXQDdaxZu279hInrN2zctLlpS7cz0HLmRB8JxeKmrdu2
+t7W172jZuWt3g6+fP9C5JqYBknuK9y7atx/ouwMHDx0uDjwSZAb0II/BUePgY8dPQF3UVHzylHtI
+KjBIGNT09UIR4bQ5LDwiUkNdDRTsqlHRSkVFisAwLyo8HXMmLzZOVgYSIfG5OVKS2ZCIyhIXS8pM
+gEQuD4OIcEa6ECRq+dNS+XghUYs7MWBPPgB7urAPCsOxQQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAy
+Mi0wOS0wOFQxMTozNDozOSswMjowMO4S2dMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDktMDhU
+MTE6MzQ6MzkrMDI6MDCfT2FvAAAAAElFTkSuQmCC" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/969025903'
+                        target="_blank"
+                        title="GitHub"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于Genius</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>Dark Mode</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/innodb/">
+                <img src="/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w_hu8c1e6e7c956faffb6e0fe62077ace01b_532582_800x0_resize_q75_box.jpg"
+                        srcset="/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w_hu8c1e6e7c956faffb6e0fe62077ace01b_532582_800x0_resize_q75_box.jpg 800w, /p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w_hu8c1e6e7c956faffb6e0fe62077ace01b_532582_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post InnoDB" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/java/" style="background-color: #2a9d8f; color: #fff;">
+                Java
+            </a>
+        
+            <a href="/categories/mysql/" style="background-color: #2a9d8f; color: #fff;">
+                Mysql
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/innodb/">InnoDB</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            深入了解InnoDB作用原理，看完此文会让你更加爱上Redis，放弃MYSQL
+        </h3>
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 08, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="innodb">InnoDB</h1>
+<h2 id="一innodb引擎">一，InnoDB引擎</h2>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905075626729.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="1后台线程">1，后台线程</h3>
+<p>InnoDB后台线程分为四大类：</p>
+<ul>
+<li>IO Thread(包含四个不同的IO)</li>
+</ul>
+<blockquote>
+<ul>
+<li>read Thread (InnoDB plugin 默认为 4，参数innodb_read_io_threads)</li>
+<li>write Thread(和 read Thread 几乎一样，参数innodb_write_io_threads)</li>
+<li>log Thread (默认为1)</li>
+<li>insert buffer Thread（默认为1）</li>
+</ul>
+</blockquote>
+<ul>
+<li>Master Thread</li>
+<li>错误监控Thread</li>
+<li>锁监控Thread</li>
+</ul>
+<p><em><strong>查看 innodb 状态</strong></em></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">show</span><span class="w"> </span><span class="kp">engine</span><span class="w"> </span><span class="n">innodb</span><span class="w"> </span><span class="n">status</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="master-thread">master Thread</h4>
+<p>master Thread是InnoDB中最主要优先级最高的线程，其包含了四个循环：主循环，后台循环，刷新循环，暂停循环</p>
+<h5 id="1主循环">1，主循环</h5>
+<p><strong>每秒操作</strong></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905083956443.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li>总是刷新日志内容，不管事务是否提交都会将日志内容刷回，这也是为什么再大的事务commit速度也很快</li>
+<li>当前IO压力比较小时，合并插入缓冲，一起插入</li>
+<li>当脏页数量大于磁盘规定脏页比例的90%时，将脏页刷回</li>
+</ul>
+</blockquote>
+<p><strong>10秒操作</strong></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905084118961.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li>MVCC时，full purge 删除已经被标记aborted的undo操作</li>
+<li>check point，模糊检查点，在模糊检查点时不会将所有的脏页写入磁盘</li>
+</ul>
+</blockquote>
+<h5 id="2后台循环">2，后台循环</h5>
+<p>没有用户活动数据库关闭即切换这个循环</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905084359982.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>当flush loop也没有事情做的时候，便会将数据库挂起进入暂停循环</p>
+<blockquote>
+<p><em>循环的时间控制，是由sleep函数控制的，但是在负载搞得情况下会不准确。通常10次主循环，一般是sleep 10次，但是在数据库负载压力大的情况下，不是等待1s，而是进行优化等于时间会小于1s</em></p>
+</blockquote>
+<h5 id="3master-tread优化">3，master Tread优化</h5>
+<h6 id="磁盘io优化">磁盘IO优化</h6>
+<p>无论磁盘IO如何，数据库每s至多指挥处理100个页，20个插入合并，于是在InnoDB plugin中提供了一个 innodb_io_capacity参数，根据其参数的百分比来刷新页</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905085922621.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h6 id="脏页阈值调整">脏页阈值调整</h6>
+<p>当你的内存十分大或者你的数据库服务器压力过高，90%的阈值很明显不是最优解，这意味着有大量数据未刷回，内存压力即恢复速度都会受到影响，可以通过调整innodb_max_dirty_pages_pct来优化（75%~80%最优）</p>
+<h6 id="自适应刷新">自适应刷新</h6>
+<p>引入innodb_adaptive_flusing参数，通过<strong>buf_flush_get_desired_flush_rate</strong>来判断刷新页阈值的大小，其是通过判断产生redo log的速度来判断最合适的刷新脏页数量</p>
+<h3 id="2内存">2，内存</h3>
+<p>mysql内存以页为单位（每页16k），修改后的页面称为脏页（modified page）</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905081536499.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>InnoDB对内存的管理是基于堆内存分配的形式，当有数据结构要申请内存时，通常是去<strong>additional memory pool</strong>，进行申请，但是当内存不够时，会申请缓冲池的空间，缓冲池也有对于的帧缓存，和缓存控制对象需要从<strong>additional memory pool</strong>中申请</p>
+<h3 id="3关键特性">3，关键特性</h3>
+<h4 id="插入缓存">插入缓存</h4>
+<h4 id="双写机制">双写机制</h4>
+<p>如果数据库正在写一个页面，但这个页面写到一半，操作系统宕机了，这就称为写失效。虽说可以使用redo log恢复，但是如果页已经损坏再进行重做是没有意义的。于是我们便需要提前有一个页的副本，便有了双写机制。</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905093152619.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>double write<strong>由两部分组成:</strong> doublewrite buffer和doublewrite 共享表空间（物理磁盘中)</p>
+<blockquote>
+<ul>
+<li>
+<p>每一次刷入脏页面时，会将表先拷贝一份到double write buffer中，然后写入到共享表空间中，再通过fsync同步到磁盘中。</p>
+</li>
+<li>
+<p>在完成double write页的写入后，再将double buffer中的页写入各个表空间文件中</p>
+</li>
+</ul>
+</blockquote>
+<p>当mysql崩溃时，便可以从共享表空间取出表来进行还原</p>
+<p><strong>也可以用skip_innodb_doublewrite来禁止两次写提高性能</strong></p>
+<h4 id="自适应hash索引">自适应hash索引</h4>
+<p>InnoDB存储引擎会监控表上的索引查找，如果观察到建立hash索引可以带来性能优化，便会为其建立hash索引</p>
+<h3 id="4mysql关闭和恢复">4，mysql关闭和恢复</h3>
+<h4 id="关闭">关闭</h4>
+<p>根据参数的不同，进行不同的关闭方式</p>
+<blockquote>
+<p>0：完成所有的full purge和merge insert操作，时间估计会很长</p>
+<p>1：不完成full purge和merge操作，但是会将脏页面刷盘</p>
+<p>2：不完成脏页面刷盘，full purge和merge的任何操作，但是会把日志写入磁盘，不会丢失事务</p>
+</blockquote>
+<h4 id="恢复">恢复</h4>
+<p>当没有进行正常关闭或者关闭参数为2时，便会进行数据库恢复</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905094948055.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h2 id="三innodb-表">三，InnoDB 表</h2>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906085717071.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="1innodb逻辑存储结构">1，InnoDB逻辑存储结构</h3>
+<blockquote>
+<p><em>表空间，段，区，页(块)，行</em></p>
+</blockquote>
+<h4 id="1表空间">1）表空间</h4>
+<p>InnoDB存储引擎逻辑结构最高层，所有数据存放在表空间中，如果不启用innodb_file_per_table，则每张表内的数据放在<strong>共享表空间</strong>中，如果启用则单独放到一个表空间内。</p>
+<p>表空间中存放数据，索引，插入缓冲。而undo log，系统事务信息，二次写缓存都是存放在<strong>共享表空间</strong>，也就是说即使启用innodb_file_per_table，共享表的大小还是会变大，即使是roll back也不会回收空间，但是innodb会根据undo log是否还有用来进行标记，为下一次插入undo日志所使用</p>
+<h4 id="2段">2）段</h4>
+<blockquote>
+<p><em>段有数据段，索引段，回滚段等</em></p>
+</blockquote>
+<p>在Innodb中数据即索引，索引即数据，所以数据为B+树的叶节点，而索引为B+树的非叶子节点</p>
+<p>并不是每个表空间都有段，表空间由分散的页和段组成</p>
+<h4 id="3区">3）区</h4>
+<p>区由<strong>连续64块页</strong>组成，一个页的大小为16KB，一个区大小为1MB，而创建表时，并不是直接创建64块页，而是先使用32块离散的页空间，使用完后在以64个连续的页申请</p>
+<h4 id="4页">4）页</h4>
+<p>InnoDB磁盘管理的最小单位，常见页类型：</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906093036323.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="5行">5）行</h4>
+<p>数据的存放是按行进行存放。</p>
+<h3 id="2innodb物理存储结构">2，InnoDB物理存储结构</h3>
+<blockquote>
+<p><em>InnoDB表由共享表空间，日志文件组，表结构定义文件组成</em></p>
+</blockquote>
+<p><strong>当开启innodb_file_per_table时，每个表独立产生一个表空间文件，以ibd结尾</strong></p>
+<p><strong>.frm是表结构定义文件，与存储引擎无关</strong></p>
+<h3 id="3innodb行记录格式">3，InnoDB行记录格式</h3>
+<p>InnoDB行记录格式分为两个类型：<strong>Compact</strong> 和 <strong>Redundant</strong></p>
+<h4 id="1compact">1）Compact</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151019841.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li><strong>变长字段长度列表：</strong></li>
+</ul>
+<p>开头首部是一个<strong>非NULL变长字段长度列表</strong>，且是逆序放置。当列的长度小于255字节占用1字节，当列长度大于255字节占用2字节，不可超过两字节。</p>
+<ul>
+<li><strong>NULL标志位：</strong></li>
+</ul>
+<p>这个部位记录了当前改行数据是否有NULL值，用1标识</p>
+<ul>
+<li><strong>记录头信息（5 byte)：</strong></li>
+</ul>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907082036166.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151516229.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151520735.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li>
+<p><strong>事务ID列（6 byte 递增）</strong></p>
+</li>
+<li>
+<p><strong>回滚指针列（7 byte）</strong></p>
+</li>
+<li>
+<p><strong>RowID列（6 byte，当没有定义primary key时产生）</strong></p>
+</li>
+</ul>
+<h6 id="实操">实操：</h6>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151718298.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>进行以上命令操作后，我们用Ultra去打开mytest.ibd文件（mysql/data文件夹下）(前提是要开启innodb_file_per_table=ON生成独立文件)，可以得到如下结果：</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151934122.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>下图是上述图片第一行与第三行分析：</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906151957778.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906152357643.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>我们由此可以得出以下几点：</p>
+<ul>
+<li>长度列表只用来标识变长字节，且是逆序放置</li>
+<li>char类型如果长度未填满会用0x20来进行填充</li>
+<li>rowID最后四个字节，代表着当前记录与下一记录的偏移量，实际 nextLog = currentLog + offset，由此可以看出页内部是通过一种链表的结构来串联各个记录的</li>
+</ul>
+<h4 id="2redundant">2）Redundant</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906152427793.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li><strong>字节长度偏移列表：</strong></li>
+</ul>
+<p>与compact不同，此处记录的是一个字段的<strong>长度偏移列表，逆序放置</strong>，大于255使用2字节，小于255使用1字节，这里的字段包括了（事务ID，回滚指针，RowId，和列数据）</p>
+<ul>
+<li><strong>记录头信息（6 byte)：</strong></li>
+</ul>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906152753223.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li>
+<p><strong>事务ID列（6 byte 递增）</strong></p>
+</li>
+<li>
+<p><strong>回滚指针列（7 byte）</strong></p>
+</li>
+<li>
+<p><strong>RowID列（6 byte，当没有定义primary key时产生）</strong></p>
+</li>
+</ul>
+<h6 id="实操-1">实操：</h6>
+<p>和compact一样打开文件</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906153024194.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>可以发现与compact相比，有比较大的不同，下面是第一行的分析结果</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906153252756.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li>
+<p>首先RowID的长度为6，即0x06。第二列是事务ID列长度为6，即6+6=12=0x0c。第三列为回滚指针，12+7=19=0x13。接下来依次类推，redundant记录了所有列(除记录头)的所有偏移地址，这一点是与Compcat不同的</p>
+</li>
+<li>
+<p><strong>Null处理不同</strong>：我们来看第三行NULL的行分析</p>
+</li>
+</ul>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906153830470.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906153835341.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>对于varchar的空值，不占用任何存储空间，但是对于char的空值是占用原来同样的存储空间的，这一点与compact的空值标记位相比有很大的不同</p>
+<blockquote>
+<p>同时根据字符集的不同，char和varchar所占用的实际字节也不同，这些会在下文说到</p>
+</blockquote>
+<h4 id="31-行溢出数据">3.1 行溢出数据</h4>
+<p>**行溢出数据：**即将一条记录中的某些数据存储在真正数据页面之外</p>
+<p>在mysql中，过大的对象会被存储在真正数据页面之外，除了BLOB和LOB这些常见的对象外，varchar实际上也会被存储在页面外。</p>
+<h5 id="1varchar行溢出数据分析">1）varchar行溢出数据分析</h5>
+<blockquote>
+<p>在Mysql中varchar最多可以存储65535个字节，但是实际上只能存储65532字节，因为varchar需要一些其他字节进行长度标识</p>
+</blockquote>
+<p>可以通过以下两条命令来进行测试：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">65535</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="n">latin1</span><span class="w"> </span><span class="n">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w"> </span><span class="o">//</span><span class="err">创建失败，在严格模式下</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">65532</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="n">latin1</span><span class="w"> </span><span class="n">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w"> </span><span class="o">//</span><span class="err">创建成功</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>注：在严格模式下第一条命令会创建失败，如果非严格模式该命令会成功但是实际上varchar会转化为text类型</p>
+<p>如果在不同的字符集下，例如GBK，UTF-8，65532也会报错，因为不同的字符集对应字符大小也是不同的。<strong>而mysql所规定的varchar大小为(65535)，是指所有列的varchar总和不超过 65535</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">test</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="kt">varchar</span><span class="p">(</span><span class="mi">22000</span><span class="p">),</span><span class="n">b</span><span class="w"> </span><span class="kt">varchar</span><span class="p">(</span><span class="mi">22000</span><span class="p">),</span><span class="n">c</span><span class="w"> </span><span class="kt">varchar</span><span class="p">(</span><span class="mi">22000</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="kp">charset</span><span class="o">=</span><span class="n">latin1</span><span class="w"> </span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是问题来了，一个页16kb数据16384个字节，怎么能存放的下65532的varchar呢，于是这就牵扯到行溢出数据。超出的varchar只会在原页保留前768个字节以及指向BLOB页的指针，剩下的字节全部存放在Uncompressed BLOB PAGE中</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906162124621.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>我们知道一个页至少有两条行数据(否则就变成链表了)，如果刚好插入的两条数据不超过16384字节就不会放入BLOB页中，如果当前页只能存放一条数据，则超出的下一条数据会存放至溢出页中。BLOB，Text也是同理。</p>
+<h4 id="32-compressed与dynamic">3.2 Compressed与Dynamic</h4>
+<p>在InnoDB plugin中，有两个新的格式。他会将BLOB的数据全部放入溢出页（留20字节的指针），还会使用zlib的算法进行压缩，对于BLOB，TEXT，VARCHAR这类长度类型进行有效存储。</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220906170704842.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="33-char的行结构存储">3.3 char的行结构存储</h4>
+<p>char虽说是定长的字符类型，但是当采用不同的字符集时，会和varchar一样变成不定长度（如CHAR(10)下UTF-8最小存储10字节最大存储30字节)，对于未满长度字符还是填充0x20</p>
+<h3 id="4innodb数据页结构">4，InnoDB数据页结构</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907080936625.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="1file-header38-byte">1）File Header(38 byte)</h4>
+<p>页头部存的是一个数据页的概要信息，是一个页专有的，而文件头存的是各种页通用的信息，比如页的类型是什么、页的编号是多少、上一页的页号是多少、下一页的页号是多少等等（说明是个双向链表）。</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907085617313.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907085635954.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="2page-header56-byte">2）Page Header(56 byte)</h4>
+<p>记录页内部的一些信息</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907085831351.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907085837944.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907085843608.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="3infimum和supremum">3）Infimum和Supremum</h4>
+<p>虚拟记录行，用来划清边界，分别代表最小记录和最大记录，<strong>且在行记录中Infimum next_record指向第一条记录，而最后一条记录指向Supremum，其大小和行格式有关（compact为26byte）</strong></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907090059807.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="4user-record">4）User Record</h4>
+<p>每插入一条记录就会从Free Space申请空间并且将记录连向User Record链表中</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907090327291.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="5page-directory">5）Page Directory</h4>
+<p>当数据量十分庞大的时候，我们不可能通过遍历的方式在页内寻找数据。由于每条记录都是有序的于是我们便可以使用类似跳表的思想来思考Page Directory。在Page Dirctory中，会将多个记录分组(4~8个)并且会使用SLOT（槽）来指向分组中的最大顺序的record</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907090802953.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<blockquote>
+<p><strong>分组规则</strong></p>
+<p>最小记录单独一组</p>
+<p>最大记录8个一组</p>
+<p>其他记录4~8个一组</p>
+</blockquote>
+<p>分组之后查询顺序：</p>
+<ul>
+<li>通过B+树索引找到相应的页</li>
+<li>页中使用二分法找到相应的槽，（要根据n_owned去查找）</li>
+<li>找到槽中最小的record遍历下去</li>
+</ul>
+<h4 id="6file-tailer8-byte">6）File Tailer（8 byte）</h4>
+<p>进行文件校验，<strong>前四个字节代表checksum和File Header的FILE_PAGE_SPACE_OR_CHKSUM进行比较</strong>，后四个字节和FILE_PAGE_LEN相同</p>
+<h3 id="5named-file-formats">5，Named File Formats</h3>
+<p>随着版本更替，类似于之前Dynamic，Compressed的新格式诞生，其对应着新的不同页格式，为了兼容新旧格式便采用Name File Formats机制来解决不同版本下页结构兼容性问题</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220907101239704.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="6约束">6，约束</h3>
+<p>关系数据库和文件系统不同的一点就是，关系数据库能保证数据完整性而文件系统需要程序端来控制。关系数据库通过<strong>约束</strong>来保证数据完整性。</p>
+<h4 id="数据完整性的三种形式">数据完整性的三种形式</h4>
+<ul>
+<li>实体完整性：保证只有个主键（primary key，unique key，触发器）</li>
+<li>域完整性：保证数据的值满足特定的条件(合适的数据类型，外键约束，编写触发器，DEFAULT约束)</li>
+<li>参照完整性：保证两张表之间的关系（触发器，外键）</li>
+</ul>
+<blockquote>
+<p><strong>InnoDB四种约束</strong></p>
+<ul>
+<li>Unique key</li>
+<li>Foreign key</li>
+<li>Default</li>
+<li>NOT NULL</li>
+</ul>
+</blockquote>
+<h3 id="7视图">7，视图</h3>
+<p>视图是一个根据对物理表查询而虚拟化的表，没有物理表现形式。应用程序可以根据视图定义获取数据或者更新数据。起到一个安全层的作用。</p>
+<h4 id="1虚拟视图">1，虚拟视图</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">t</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span><span class="o">//</span><span class="err">创建表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="n">v_t</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="o">//</span><span class="err">创建物理表中</span><span class="n">id</span><span class="o">&lt;</span><span class="mi">10</span><span class="err">的视图</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>WITH CHECK OPTION:在更新时，会根据视图的定义来判断更新是否有效。</p>
+<h4 id="2物化视图">2，物化视图</h4>
+<p>在Oracle中支持物化视图，即这个视图时实际存在的，用于预先计算并保存表连接或聚集耗时较多的操作结果。</p>
+<p><strong>创建视图的方式</strong>：</p>
+<ul>
+<li><strong>BUILD IMMEDIATE</strong>:创建物化视图时就生成数据</li>
+<li>,<strong>BUILD DEFERRED</strong>:创建物化视图时不生成数据按需生成数据。</li>
+</ul>
+<p><strong>刷新模式</strong>：</p>
+<ul>
+<li><strong>ON DEMAND</strong>：用户需要时刷新</li>
+<li><strong>ON COMMIT</strong>：用户提交时便刷新</li>
+</ul>
+<p><strong>刷新方法：</strong></p>
+<ul>
+<li>**FAST：**增量刷新</li>
+<li>**COMPLETE：**全量刷新</li>
+<li>**FORCE：**判断是否可以快速刷新，可以则FAST，不可以则COMPLETE</li>
+<li>**NEVER：**不刷新</li>
+</ul>
+<blockquote>
+<p>MYSQL是不具备物化表的，如果想要构建物化表，可以配合触发器和两张表来实现</p>
+</blockquote>
+<h3 id="8分区">8，分区</h3>
+<p>分区功能不是存储引擎层完成的，所以InnoDB，MyISAM，NDB都是支持分区功能的，分区即将一个表或者索引物分成更小的部分，方便管理和优化查询。<strong>MYSQL数据库支持水平分区并不支持垂直分区</strong></p>
+<blockquote>
+<p>**水平分区：**一表中不同行记录放入到不同文件中</p>
+<p>**垂直分区：**一表中不同列的数据放入到不同文件中</p>
+</blockquote>
+<p>被分区的文件变为<strong>表名#p#分区名.ibd</strong></p>
+<p><strong>查看表的分区情况</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">table_name</span><span class="p">,</span><span class="n">partition_name</span><span class="p">,</span><span class="n">table_rows</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">PARTITIONS</span><span class="w"> </span><span class="k">where</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">table_schema</span><span class="o">=</span><span class="k">database</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">table_name</span><span class="o">=</span><span class="s1">&#39;$tableName&#39;</span><span class="err">\</span><span class="n">G</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="分区类型">分区类型</h4>
+<ul>
+<li><strong>Range</strong></li>
+</ul>
+<blockquote>
+<p>Range分区是将表按照给定的连续区间的列值放入分区</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">range_t</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="n">id</span><span class="p">)(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="nf">than</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="nf">than</span><span class="w"> </span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上操作会建立两个表，&lt;10的放入p0，&lt;20的会放入p20，超出20的会报错无法存放，可以自行插入数据并且使用上述查看情况代码查看。</p>
+<p>当你查询<strong>10&lt;id&lt;20</strong>的数据列时，只会查询p1表，而不会去查询p0表，大大提高了查询效率</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">explain</span><span class="w"> </span><span class="n">partitions</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">range_t</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">&gt;=</span><span class="mi">10</span><span class="err">\</span><span class="n">G</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220908154627017.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>但如果是查询5&lt;id&lt;20的时候便会查询两个分区，效率会降低</p>
+<p>Range中只能使用YEAR()，TO_DAYS()，TO_SECONDS进行优化选择。</p>
+<ul>
+<li><strong>List</strong></li>
+</ul>
+<blockquote>
+<p>与Range分区类似，不过是面向离散的区间</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">list_t</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">id</span><span class="p">)(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果插入的值不在定义中，则会抛出异常</p>
+<ul>
+<li><strong>Hash</strong></li>
+</ul>
+<blockquote>
+<p>根据用户自定义的函数进行分区</p>
+</blockquote>
+<p><strong>Hash分区</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">hash_t</span><span class="p">(</span><span class="kt">date</span><span class="w"> </span><span class="kt">datetime</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nf">hash</span><span class="p">(</span><span class="kt">YEAR</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partitions</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>按年份%4进行分区</p>
+<p><strong>Linear Hash分区</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">linear_t</span><span class="p">(</span><span class="kt">date</span><span class="w"> </span><span class="kt">datetime</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">linear</span><span class="w"> </span><span class="nf">hash</span><span class="p">(</span><span class="kt">YEAR</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partitions</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>取大于分区数量4的下一个2的幂值V，V=POWER(2,CEILING(LOG(2,NUM)))=4;来进行分区</p>
+<p>Linear分区对增删改查操作更快，但是不如hash分区均匀</p>
+<ul>
+<li><strong>Key</strong></li>
+</ul>
+<blockquote>
+<p>根据MYSQL提供的函数来进行分区</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">key_t</span><span class="p">(</span><span class="kt">date</span><span class="w"> </span><span class="kt">datetime</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">linear</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="kt">YEAR</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partitions</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>根据MYSQL的powers-of-two算法得到的分区</p>
+<h5 id="columns分区">COLUMNS分区</h5>
+<p>前面四种分区条件必须是整数类型，而COLUMS分区可以使用非整数类型数据</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220908161440163.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p>只需在每一个分区条件后加上一个COLUMNS字段即可，如下代码展示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">key_t</span><span class="p">(</span><span class="kt">date</span><span class="w"> </span><span class="kt">datetime</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">linear</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="nf">columns</span><span class="p">(</span><span class="kt">YEAR</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partitions</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="子分区">子分区</h4>
+<p>子分区即在分区的基础上在进行分区，MYSQL运行在LIST，RANGE分区上再进行HASH，KEY分区</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="nf">son_t</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="kt">INT</span><span class="p">,</span><span class="kt">date</span><span class="w"> </span><span class="kt">datetime</span><span class="p">)</span><span class="kp">engine</span><span class="o">=</span><span class="n">innodb</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="kt">YEAR</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">subpartition</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nf">hash</span><span class="w"> </span><span class="p">(</span><span class="nf">MONTH</span><span class="p">(</span><span class="kt">date</span><span class="p">))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">subpartitions</span><span class="w"> </span><span class="mi">12</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p2021</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="nf">than</span><span class="w"> </span><span class="p">(</span><span class="mi">2022</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p2022</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="nf">than</span><span class="w"> </span><span class="p">(</span><span class="mi">2023</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partition</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="n">than</span><span class="w"> </span><span class="n">MAXVALUE</span><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>规则：</p>
+<ul>
+<li>任何一个分区上面定义了子分区，那所有分区必须定义子分区，如下代码错误</li>
+</ul>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220908161745615.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li>
+<p>每一个分区的子分区数目必须相同</p>
+</li>
+<li>
+<p>每一个分区的子分区名字必须唯一</p>
+</li>
+</ul>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220908161756875.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+</blockquote>
+<h4 id="分区中null值">分区中NULL值</h4>
+<p>Oracle和Mysql对待NULL值的分区是不一样的，<strong>Oracle会专门建立一个NULL值分区来存放NULL值。</strong></p>
+<h5 id="mysql处理"><strong>MYSQL处理</strong></h5>
+<blockquote>
+<p>**RANGE：**把NULL视为比所有非NULL值都小的数，所以是放在分区最左边。()会把NULL的值记录</p>
+<p>**LIST：**必须为NULL创建对应的NULL值</p>
+<p>**KEY，HASH：**将NULL作为0值返回</p>
+</blockquote>
+<h4 id="分区与性能">分区与性能</h4>
+<p>实际上使用分区并不一定会使性能优化，相反可能还会导致查询变慢。</p>
+<blockquote>
+<p>当你对索引行进行搜索时，会大大提高速度，<strong>但是对非索引行搜索时，需要遍历整个分区去寻找</strong></p>
+</blockquote>
+<p>我们知道1000w行的数据对应B+树也不超过三层，原先无分区状态，最多进行三次磁盘IO，而当你对其进行分区(分10个区，一个区100w，2层)，即非索引行要进行2*10=20次磁盘IO可见速度之慢</p>
+<ul>
+<li><strong>什么时候该用分区？</strong></li>
+</ul>
+<blockquote>
+<p>需要对批量数据每次进行数据分析，且不会涉及其他非索引行查询的可以使用分区</p>
+</blockquote>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/mysql/">Mysql</a>
+        
+            <a href="/tags/java/">Java</a>
+        
+            <a href="/tags/innodb/">InnoDB</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed Genius 1942</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                <img src="/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/bk1.9dfafb22a98d70f648611ba27375ab6a_hud8899dd775ae54c80ca0b524db7840c0_28684_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post JUC并发编程-从入门到单线程"
+                        
+                        data-hash="md5-nfr7IqmNcPZIYRuic3Wrag==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">JUC并发编程-从入门到单线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Genius
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.13.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一innodb引擎">一，InnoDB引擎</a>
+      <ol>
+        <li><a href="#1后台线程">1，后台线程</a>
+          <ol>
+            <li><a href="#master-thread">master Thread</a></li>
+          </ol>
+        </li>
+        <li><a href="#2内存">2，内存</a></li>
+        <li><a href="#3关键特性">3，关键特性</a>
+          <ol>
+            <li><a href="#插入缓存">插入缓存</a></li>
+            <li><a href="#双写机制">双写机制</a></li>
+            <li><a href="#自适应hash索引">自适应hash索引</a></li>
+          </ol>
+        </li>
+        <li><a href="#4mysql关闭和恢复">4，mysql关闭和恢复</a>
+          <ol>
+            <li><a href="#关闭">关闭</a></li>
+            <li><a href="#恢复">恢复</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#三innodb-表">三，InnoDB 表</a>
+      <ol>
+        <li><a href="#1innodb逻辑存储结构">1，InnoDB逻辑存储结构</a>
+          <ol>
+            <li><a href="#1表空间">1）表空间</a></li>
+            <li><a href="#2段">2）段</a></li>
+            <li><a href="#3区">3）区</a></li>
+            <li><a href="#4页">4）页</a></li>
+            <li><a href="#5行">5）行</a></li>
+          </ol>
+        </li>
+        <li><a href="#2innodb物理存储结构">2，InnoDB物理存储结构</a></li>
+        <li><a href="#3innodb行记录格式">3，InnoDB行记录格式</a>
+          <ol>
+            <li><a href="#1compact">1）Compact</a></li>
+            <li><a href="#2redundant">2）Redundant</a></li>
+            <li><a href="#31-行溢出数据">3.1 行溢出数据</a></li>
+            <li><a href="#32-compressed与dynamic">3.2 Compressed与Dynamic</a></li>
+            <li><a href="#33-char的行结构存储">3.3 char的行结构存储</a></li>
+          </ol>
+        </li>
+        <li><a href="#4innodb数据页结构">4，InnoDB数据页结构</a>
+          <ol>
+            <li><a href="#1file-header38-byte">1）File Header(38 byte)</a></li>
+            <li><a href="#2page-header56-byte">2）Page Header(56 byte)</a></li>
+            <li><a href="#3infimum和supremum">3）Infimum和Supremum</a></li>
+            <li><a href="#4user-record">4）User Record</a></li>
+            <li><a href="#5page-directory">5）Page Directory</a></li>
+            <li><a href="#6file-tailer8-byte">6）File Tailer（8 byte）</a></li>
+          </ol>
+        </li>
+        <li><a href="#5named-file-formats">5，Named File Formats</a></li>
+        <li><a href="#6约束">6，约束</a>
+          <ol>
+            <li><a href="#数据完整性的三种形式">数据完整性的三种形式</a></li>
+          </ol>
+        </li>
+        <li><a href="#7视图">7，视图</a>
+          <ol>
+            <li><a href="#1虚拟视图">1，虚拟视图</a></li>
+            <li><a href="#2物化视图">2，物化视图</a></li>
+          </ol>
+        </li>
+        <li><a href="#8分区">8，分区</a>
+          <ol>
+            <li><a href="#分区类型">分区类型</a></li>
+            <li><a href="#子分区">子分区</a></li>
+            <li><a href="#分区中null值">分区中NULL值</a></li>
+            <li><a href="#分区与性能">分区与性能</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

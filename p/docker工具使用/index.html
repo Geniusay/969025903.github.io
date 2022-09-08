@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='了解如何使用Docker，包含docker的大部分操作以及相关命令'><title>Docker工具使用</title>
+
+<link rel='canonical' href='https://geniusBlog.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.ac77dcf8b111b51da39a92990f431923f210f3876d85798a2125667f96dc33a4.css"><meta property='og:title' content='Docker工具使用'>
+<meta property='og:description' content='了解如何使用Docker，包含docker的大部分操作以及相关命令'>
+<meta property='og:url' content='https://geniusBlog.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/'>
+<meta property='og:site_name' content='Genius'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Tools' /><meta property='article:tag' content='微服务' /><meta property='article:published_time' content='2022-09-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-09-06T00:00:00&#43;00:00'/><meta property='og:image' content='https://geniusBlog.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3.jpg' />
+<meta name="twitter:site" content="@genius">
+    <meta name="twitter:creator" content="@genius"><meta name="twitter:title" content="Docker工具使用">
+<meta name="twitter:description" content="了解如何使用Docker，包含docker的大部分操作以及相关命令"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://geniusBlog.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3.jpg' />
+    <link rel="shortcut icon" href="/img/Genius.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Genius_hua95d8fe85c65c73f01d0951a42335663_30321_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🎬</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Genius</a></h1>
+            <h2 class="site-description">&#34;现在我用沉静的目光见到 恰是那台机器脉冲的颤跳&#34;</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/sbg-genius'
+                        target="_blank"
+                        title="Gitee"
+                    >
+                        
+                        
+                            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">  <image id="image0" width="24" height="24" x="0" y="0"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACZ1BMVEUAAAD/AADcABHbABPZ
+ABLZABPZABPbABH/AADZABPbABPZABKqAADZABHaABPZBBbaBRjaBRjZBRfbBhjZBhfYABLZARTZ
+ABDWAADWAADWAADYABXbAA/dABLbABLaARPnXGjsgInsgYrhLDvcAAvbAxjfAA3ZABLeABLZAhPY
+AAvjTFb409bsgInaAADbBhjZABPXAAfthpDVAADaABPdABLcABPZAA/64OLzsLbXAAfdAxXZAxbX
+AAHnX2vZABDaABPYABHeABLaBRfZABHZABLaBBjXAAjZAhXaBBfbBRjYABPZBRjlU2HXAATZAxXd
+BBf3yczZARHsfonZABTsgov51tnjS1bYAArZARTbAAvhLDzmWWXaARTaABLYABTYABLkABPdABLb
+ABLZABPmABPZARPaBRfnBRjbABPWAAPVAADZAADZAAvWAAfaDyHqeYLsf4nrfoj////lWWT9/Pzn
+BRncGCb++/v9/v31wMXysLbzs7jysrfzsbbiRFL+/f3++/z+/v7mY27ZDRfZBxraCBraBxnaBxrZ
+BxnZBRjUAADqeoT2zM/aCx3XAAvWAAbXAAnXAAjXAAfYABT0vsLaECHWAQjgO0nvlp3vmJ/umJ/v
+maDgOEf1wMTbEyTshI7shY7+/Pz98/T++vrrfYfaECLWAAjvlp7xp6788fL9+/v0vcHZCRzYABDX
+AArVAAHZBhj2ztH+///qd4H2y8/cGSrYAxLZCBrkU1/99/f+/f7sfoj9+fn1wcbyr7Tysbf0vML8
+9vb+/P3ZEBroBBj++fn98vP++fr89vfgOkfqeILaDR+weo5OAAAAYXRSTlMAAixptNjyaQEok/ID
+WOX7/f775Vhw+f3+/flvVP3+/P7+/P79VCjn/vz+/v78/ueT/v75Ke/8/f7+/fz7/v7+/vv9/f3Y
+/v7+/f3y+/7++/z+/f75/P7+/vz9/v78/nBvjqLsXwAAAAFiS0dEc0EJPc4AAAAHdElNRQfmCQgN
+IifODXi5AAAB2ElEQVQoz2NgAAJGBgYmZhZWNjZWFnYmMBcCOBg4ubgTk5JTUpKTErm5OIECYMDD
+wMuXmsYvIAgEAkLpGcIiQCGwetHMJDHxLAmJ7GwglpTKyZUG6eFgkJGVk8/LVygoLCosLFQsKlJS
+VlEFyaipa2hqaesUI4Cunr4a0AaDVDHDktLiUoSEkXGZAQ+DiamZeblFcUVlVXUNCNTWWdZbWZua
+MDAn2tjaNTQ2Nbe0trV3tLd3tnXZOzgmMjOwODl39zQ19fb190+YOAkIJk7un+LixMLgmukmUdhU
+PHXa9BkzZ82eM2f2rJlz3T0yXRnYUjyzi4qb5s3vXgCzfGG3VwobUEIgu7C4GC6xaPGSpdmeKd5A
+owQlCoE6li0HGjVnxcpVq5sKJdyARrE4CXQDdaxZu279hInrN2zctLlpS7cz0HLmRB8JxeKmrdu2
+t7W172jZuWt3g6+fP9C5JqYBknuK9y7atx/ouwMHDx0uDjwSZAb0II/BUePgY8dPQF3UVHzylHtI
+KjBIGNT09UIR4bQ5LDwiUkNdDRTsqlHRSkVFisAwLyo8HXMmLzZOVgYSIfG5OVKS2ZCIyhIXS8pM
+gEQuD4OIcEa6ECRq+dNS+XghUYs7MWBPPgB7urAPCsOxQQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAy
+Mi0wOS0wOFQxMTozNDozOSswMjowMO4S2dMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDktMDhU
+MTE6MzQ6MzkrMDI6MDCfT2FvAAAAAElFTkSuQmCC" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/969025903'
+                        target="_blank"
+                        title="GitHub"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于Genius</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>Dark Mode</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">
+                <img src="/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3_hu767e5ee59e1e1f4169efeeea41c58d0e_88874_800x0_resize_q75_box.jpg"
+                        srcset="/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3_hu767e5ee59e1e1f4169efeeea41c58d0e_88874_800x0_resize_q75_box.jpg 800w, /p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3_hu767e5ee59e1e1f4169efeeea41c58d0e_88874_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="501" 
+                        loading="lazy"
+                        alt="Featured image of post Docker工具使用" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/dcs/" style="background-color: #2a9d8f; color: #fff;">
+                微服务
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">Docker工具使用</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            了解如何使用Docker，包含docker的大部分操作以及相关命令
+        </h3>
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 06, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="docker">Docker</h1>
+<h2 id="一初始docker">一，初始Docker</h2>
+<h3 id="11-出现的问题">1.1 出现的问题</h3>
+<p>早期项目部署十分复杂，不同的操作系统，繁多的组件，兼容性问题等等，都是需要解决的</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726211552458.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726211642490.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="12-docker如何解决的">1.2 Docker如何解决的？</h3>
+<h4 id="解决依赖问题">解决依赖问题</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726211436346.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="解决操作系统环境问题">解决操作系统环境问题</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726211900524.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="总结">总结</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726212126713.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="13-docker与虚拟机的区别">1.3 Docker与虚拟机的区别</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726213018490.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><strong>Hypervisor用于模拟各种计算机硬件</strong></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726213137163.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="14-镜像和容器">1.4 镜像和容器</h3>
+<p>每次运行时，将镜像放入一个独立的容器中，容器无法对原本的镜像进行写，只能进行读，例如mysql这样的应用我需要存数据该怎么办呢，这个时候我们便可以将镜像中的data拷贝一份，然后供容器中的应用进行读写</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726215029790.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="dockerhub">DockerHub</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726215138089.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="docker架构">Docker架构</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220726215339218.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h2 id="二docker的安装">二，Docker的安装</h2>
+<h3 id="21-安装docker">2.1 安装Docker</h3>
+<p>Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。</p>
+<p>Docker CE 分为 <code>stable</code> <code>test</code> 和 <code>nightly</code> 三个更新频道。</p>
+<p>官方网站上有各种环境下的 <a class="link" href="https://docs.docker.com/install/"  target="_blank" rel="noopener"
+    >安装指南</a>，这里主要介绍 Docker CE 在 CentOS上的安装。</p>
+<h3 id="22-centos安装docker">2.2 CentOS安装Docker</h3>
+<p>Docker CE 支持 64 位版本 CentOS 7，并且要求内核版本不低于 3.10， CentOS 7 满足最低内核的要求，所以我们在CentOS 7安装Docker。</p>
+<h4 id="221-卸载可选">2.2.1 卸载（可选）</h4>
+<p>如果之前安装过旧版本的Docker，可以使用下面命令卸载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">yum remove docker \
+</span></span><span class="line"><span class="cl">                  docker-client \
+</span></span><span class="line"><span class="cl">                  docker-client-latest \
+</span></span><span class="line"><span class="cl">                  docker-common \
+</span></span><span class="line"><span class="cl">                  docker-latest \
+</span></span><span class="line"><span class="cl">                  docker-latest-logrotate \
+</span></span><span class="line"><span class="cl">                  docker-logrotate \
+</span></span><span class="line"><span class="cl">                  docker-selinux \
+</span></span><span class="line"><span class="cl">                  docker-engine-selinux \
+</span></span><span class="line"><span class="cl">                  docker-engine \
+</span></span><span class="line"><span class="cl">                  docker-ce
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="222-安装docker">2.2.2 安装docker</h4>
+<p>Centos:首先需要大家虚拟机联网，安装yum工具</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yum install -y yum-utils <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>           device-mapper-persistent-data <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>           lvm2 --skip-broken
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Ubuntu:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common <span class="o">&amp;&amp;</span> curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add - <span class="o">&amp;&amp;</span> sudo add-apt-repository <span class="s2">&#34;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&#34;</span> <span class="o">&amp;&amp;</span> sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y docker-ce
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后输入命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum install -y docker-ce
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>docker-ce为社区免费版本。稍等片刻，docker即可安装成功。</p>
+<h4 id="223-启动docker">2.2.3 启动docker</h4>
+<p>Docker应用需要用到各种端口，逐一去修改防火墙设置。非常麻烦，因此建议大家直接关闭防火墙！</p>
+<p>启动docker前，一定要关闭防火墙后！！</p>
+<p>启动docker前，一定要关闭防火墙后！！</p>
+<p>启动docker前，一定要关闭防火墙后！！</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 关闭</span>
+</span></span><span class="line"><span class="cl">systemctl stop firewalld
+</span></span><span class="line"><span class="cl"><span class="c1"># 禁止开机启动防火墙</span>
+</span></span><span class="line"><span class="cl">systemctl disable firewalld
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过命令启动docker：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># Centos</span>
+</span></span><span class="line"><span class="cl">systemctl start docker  <span class="c1"># 启动docker服务</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">systemctl stop docker  <span class="c1"># 停止docker服务</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">systemctl restart docker  <span class="c1"># 重启docker服务</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#Ubuntu</span>
+</span></span><span class="line"><span class="cl">sudo service docker start <span class="c1"># 启动docker</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">sudo service docker stop <span class="c1"># 停止docker</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">sudo service docker restart <span class="c1"># 重启docker</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后输入命令，可以查看docker版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="224-配置镜像加速">2.2.4 配置镜像加速</h4>
+<p>docker官方镜像仓库网速较差，我们需要设置国内镜像服务：</p>
+<p>参考阿里云的镜像加速文档：https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</p>
+<p>Ubuntu更新本地镜像源：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /etc/docker <span class="o">&amp;&amp;</span> sudo tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;registry-mirrors&#34;: [&#34;https://epsax6ut.mirror.aliyuncs.com&#34;],
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;log-driver&#34;:&#34;json-file&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;log-opts&#34;: {&#34;max-size&#34;:&#34;10m&#34;, &#34;max-file&#34;:&#34;3&#34;}
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl restart docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Centos更新本地镜像源：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 设置docker镜像源</span>
+</span></span><span class="line"><span class="cl">yum-config-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --add-repo <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">sed -i <span class="s1">&#39;s/download.docker.com/mirrors.aliyun.com\/docker-ce/g&#39;</span> /etc/yum.repos.d/docker-ce.repo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">yum makecache fast
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="23-centos7安装dockercompose">2.3 CentOS7安装DockerCompose</h3>
+<h4 id="231-下载">2.3.1 下载</h4>
+<p>Linux下需要通过命令下载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装</span>
+</span></span><span class="line"><span class="cl">curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-<span class="sb">`</span>uname -s<span class="sb">`</span>-<span class="sb">`</span>uname -m<span class="sb">`</span> &gt; /usr/local/bin/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果下载速度较慢，或者下载失败，可以使用课前资料提供的docker-compose文件：</p>
+<p><img src="https://pan.baidu.com/s/assets/image-20210417133020614.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20210417133020614"
+	
+	
+></p>
+<p>上传到<code>/usr/local/bin/</code>目录也可以。</p>
+<h4 id="232-修改文件权限">2.3.2 修改文件权限</h4>
+<p>修改文件权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 修改权限</span>
+</span></span><span class="line"><span class="cl">chmod +x /usr/local/bin/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="233-base自动补全命令">2.3.3 Base自动补全命令：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 补全命令</span>
+</span></span><span class="line"><span class="cl">curl -L https://raw.githubusercontent.com/docker/compose/1.29.1/contrib/completion/bash/docker-compose &gt; /etc/bash_completion.d/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果这里出现错误，需要修改自己的hosts文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;199.232.68.133 raw.githubusercontent.com&#34;</span> &gt;&gt; /etc/hosts
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-docker镜像仓库">2.4 Docker镜像仓库</h3>
+<p>搭建镜像仓库可以基于Docker官方提供的DockerRegistry来实现。</p>
+<p>官网地址：https://hub.docker.com/_/registry</p>
+<h4 id="241-简化版镜像仓库">2.4.1 简化版镜像仓库</h4>
+<p>Docker官方的Docker Registry是一个基础版本的Docker镜像仓库，具备仓库管理的完整功能，但是没有图形化界面。</p>
+<p>搭建方式比较简单，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --restart<span class="o">=</span>always <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --name registry	<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -p 5000:5000 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -v registry-data:/var/lib/registry <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    registry
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>命令中挂载了一个数据卷registry-data到容器内的/var/lib/registry 目录，这是私有镜像库存放数据的目录。</p>
+<p>访问http://YourIp:5000/v2/_catalog 可以查看当前私有镜像服务中包含的镜像</p>
+<h4 id="242带有图形化界面版本">2.4.2.带有图形化界面版本</h4>
+<p>使用DockerCompose部署带有图象界面的DockerRegistry，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">registry</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./registry-data:/var/lib/registry</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ui</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">joxit/docker-registry-ui:static</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">8080</span><span class="p">:</span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">REGISTRY_TITLE=传智教育私有仓库</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">REGISTRY_URL=http://registry:5000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">registry</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="243配置docker信任地址">2.4.3.配置Docker信任地址</h4>
+<p>我们的私服采用的是http协议，默认不被Docker信任，所以需要做一个配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 打开要修改的文件</span>
+</span></span><span class="line"><span class="cl">vi /etc/docker/daemon.json
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加内容：</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;insecure-registries&#34;</span>:<span class="o">[</span><span class="s2">&#34;http://192.168.150.101:8080&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 重加载</span>
+</span></span><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl"><span class="c1"># 重启docker</span>
+</span></span><span class="line"><span class="cl">systemctl restart docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802135724022.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h2 id="三docker基本操作">三，Docker基本操作</h2>
+<h3 id="31-镜像相关命令">3.1 镜像相关命令</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801092820986.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801093107928.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="镜像拉取">镜像拉取</h4>
+<p>例如：想拉取mysql，可以去 <a class="link" href="https://hub.docker.com/"  target="_blank" rel="noopener"
+    >https://hub.docker.com/</a> 搜索 mysql 查看拉取命令</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801095740553.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker pull [images]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="镜像保存">镜像保存</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker save -o <span class="o">[</span>filename<span class="o">]</span> <span class="o">[</span>IMAGE<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="镜像删除">镜像删除</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker rmi [IMAGE]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="镜像加载">镜像加载</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker load -i [tar filename]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="32-容器相关命令">3.2 容器相关命令</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801095544732.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="容器运行">容器运行</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801100132442.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker ps <span class="c1">#查看容器状态</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801100538697.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="进入容器操作">进入容器操作</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801101007875.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801102147928.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="33-数据卷">3.3 数据卷</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801102608398.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801102906328.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="操作数据卷">操作数据卷</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801102956561.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="挂载数据卷">挂载数据卷</h4>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801103604250.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h4 id="挂载目录">挂载目录</h4>
+<p>挂在自己的redis.conf到当前容器下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -p 6379:6379 --name myredis -v /etc/docker/tmp/redis.conf:/etc/redis/redis.conf -v /etc/docker/tmp/data:/data -d redis redis-server /etc/redis/redis.conf --appendonly yes  --requirepass xxx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801114353843.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h2 id="四自定义镜像">四，自定义镜像</h2>
+<h3 id="41-镜像结构">4.1 镜像结构</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220801115955625.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="42-dockerfile">4.2 Dockerfile</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802095039443.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="43-动手操控">4.3 动手操控</h3>
+<p><strong>将一个web项目封装为一个镜像</strong></p>
+<p>DockerFile: 链接：https://pan.baidu.com/s/1X-XbSs3usFlFi15WB3HmSQ  提取码：sprx 
+demo-jar: 链接：https://pan.baidu.com/s/1YFYAtuGvRFGEnnCVPbNHyg 提取码：sprx 
+jdk-8: 链接：https://pan.baidu.com/s/1mXaooIDVK2hFa0UznXJWKQ 提取码：sprx</p>
+<h5 id="dockerfile">dockerFile</h5>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802100024892.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<ul>
+<li>
+<p>在Linux系统下创建一个docker-demo</p>
+</li>
+<li>
+<p>放入以上三个文件</p>
+</li>
+<li>
+<p>在docker-demo文件下执行命令</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker build -t javawebtest:1.0 . <span class="c1">#这个.代表着docker file当前所在的目录</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>run docker项目</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run --name xxx -p 8090:8090 -d javawebtest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="优化">优化</h5>
+<p>由于中间JDK的代码为冗余代码很明显可以优化简化，于是我们可以使用基于java:8-alpine的镜像来帮助构建</p>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802101123770.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h2 id="五dockercompose">五，DockerCompose</h2>
+<h3 id="51-简介">5.1 简介</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802102032246.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<h3 id="52-centos7安装dockercompose">5.2 CentOS7安装DockerCompose</h3>
+<h4 id="下载">下载</h4>
+<p>Linux下需要通过命令下载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装</span>
+</span></span><span class="line"><span class="cl">curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-<span class="sb">`</span>uname -s<span class="sb">`</span>-<span class="sb">`</span>uname -m<span class="sb">`</span> &gt; /usr/local/bin/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果下载速度较慢，或者下载失败，可以使用课前资料提供的docker-compose文件：</p>
+<p><img src="https://pan.baidu.com/s/assets/image-20210417133020614.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20210417133020614"
+	
+	
+></p>
+<p>上传到<code>/usr/local/bin/</code>目录也可以。</p>
+<h4 id="修改文件权限">修改文件权限</h4>
+<p>修改文件权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 修改权限</span>
+</span></span><span class="line"><span class="cl">chmod +x /usr/local/bin/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="base自动补全命令">Base自动补全命令：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 补全命令</span>
+</span></span><span class="line"><span class="cl">curl -L https://raw.githubusercontent.com/docker/compose/1.29.1/contrib/completion/bash/docker-compose &gt; /etc/bash_completion.d/docker-compose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果这里出现错误，需要修改自己的hosts文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;199.232.68.133 raw.githubusercontent.com&#34;</span> &gt;&gt; /etc/hosts
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="53-部署微服务项目">5.3 部署微服务项目</h3>
+<p><img src="https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220802104627601.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image"
+	
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker-compose up <span class="c1">#上传整个微服务</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="六-docker镜像仓库">六 Docker镜像仓库</h2>
+<p>搭建镜像仓库可以基于Docker官方提供的DockerRegistry来实现。</p>
+<p>官网地址：https://hub.docker.com/_/registry</p>
+<h3 id="61简化版镜像仓库">6.1.简化版镜像仓库</h3>
+<p>Docker官方的Docker Registry是一个基础版本的Docker镜像仓库，具备仓库管理的完整功能，但是没有图形化界面。</p>
+<p>搭建方式比较简单，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --restart<span class="o">=</span>always <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --name registry	<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -p 5000:5000 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -v registry-data:/var/lib/registry <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    registry
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>命令中挂载了一个数据卷registry-data到容器内的/var/lib/registry 目录，这是私有镜像库存放数据的目录。</p>
+<p>访问http://YourIp:5000/v2/_catalog 可以查看当前私有镜像服务中包含的镜像</p>
+<h3 id="62带有图形化界面版本">6.2.带有图形化界面版本</h3>
+<p>使用DockerCompose部署带有图象界面的DockerRegistry，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">registry</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./registry-data:/var/lib/registry</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ui</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">joxit/docker-registry-ui:static</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">8080</span><span class="p">:</span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">REGISTRY_TITLE=传智教育私有仓库</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">REGISTRY_URL=http://registry:5000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">registry</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="63配置docker信任地址">6.3.配置Docker信任地址</h3>
+<p>我们的私服采用的是http协议，默认不被Docker信任，所以需要做一个配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 打开要修改的文件</span>
+</span></span><span class="line"><span class="cl">vi /etc/docker/daemon.json
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加内容：</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;insecure-registries&#34;</span>:<span class="o">[</span><span class="s2">&#34;http://192.168.150.101:8080&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 重加载</span>
+</span></span><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl"><span class="c1"># 重启docker</span>
+</span></span><span class="line"><span class="cl">systemctl restart docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/tools/">Tools</a>
+        
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed Genius 1942</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Genius
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.13.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一初始docker">一，初始Docker</a>
+      <ol>
+        <li><a href="#11-出现的问题">1.1 出现的问题</a></li>
+        <li><a href="#12-docker如何解决的">1.2 Docker如何解决的？</a>
+          <ol>
+            <li><a href="#解决依赖问题">解决依赖问题</a></li>
+            <li><a href="#解决操作系统环境问题">解决操作系统环境问题</a></li>
+            <li><a href="#总结">总结</a></li>
+          </ol>
+        </li>
+        <li><a href="#13-docker与虚拟机的区别">1.3 Docker与虚拟机的区别</a></li>
+        <li><a href="#14-镜像和容器">1.4 镜像和容器</a>
+          <ol>
+            <li><a href="#dockerhub">DockerHub</a></li>
+            <li><a href="#docker架构">Docker架构</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#二docker的安装">二，Docker的安装</a>
+      <ol>
+        <li><a href="#21-安装docker">2.1 安装Docker</a></li>
+        <li><a href="#22-centos安装docker">2.2 CentOS安装Docker</a>
+          <ol>
+            <li><a href="#221-卸载可选">2.2.1 卸载（可选）</a></li>
+            <li><a href="#222-安装docker">2.2.2 安装docker</a></li>
+            <li><a href="#223-启动docker">2.2.3 启动docker</a></li>
+            <li><a href="#224-配置镜像加速">2.2.4 配置镜像加速</a></li>
+          </ol>
+        </li>
+        <li><a href="#23-centos7安装dockercompose">2.3 CentOS7安装DockerCompose</a>
+          <ol>
+            <li><a href="#231-下载">2.3.1 下载</a></li>
+            <li><a href="#232-修改文件权限">2.3.2 修改文件权限</a></li>
+            <li><a href="#233-base自动补全命令">2.3.3 Base自动补全命令：</a></li>
+          </ol>
+        </li>
+        <li><a href="#24-docker镜像仓库">2.4 Docker镜像仓库</a>
+          <ol>
+            <li><a href="#241-简化版镜像仓库">2.4.1 简化版镜像仓库</a></li>
+            <li><a href="#242带有图形化界面版本">2.4.2.带有图形化界面版本</a></li>
+            <li><a href="#243配置docker信任地址">2.4.3.配置Docker信任地址</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#三docker基本操作">三，Docker基本操作</a>
+      <ol>
+        <li><a href="#31-镜像相关命令">3.1 镜像相关命令</a>
+          <ol>
+            <li><a href="#镜像拉取">镜像拉取</a></li>
+            <li><a href="#镜像保存">镜像保存</a></li>
+            <li><a href="#镜像删除">镜像删除</a></li>
+            <li><a href="#镜像加载">镜像加载</a></li>
+          </ol>
+        </li>
+        <li><a href="#32-容器相关命令">3.2 容器相关命令</a>
+          <ol>
+            <li><a href="#容器运行">容器运行</a></li>
+            <li><a href="#进入容器操作">进入容器操作</a></li>
+          </ol>
+        </li>
+        <li><a href="#33-数据卷">3.3 数据卷</a>
+          <ol>
+            <li><a href="#操作数据卷">操作数据卷</a></li>
+            <li><a href="#挂载数据卷">挂载数据卷</a></li>
+            <li><a href="#挂载目录">挂载目录</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#四自定义镜像">四，自定义镜像</a>
+      <ol>
+        <li><a href="#41-镜像结构">4.1 镜像结构</a></li>
+        <li><a href="#42-dockerfile">4.2 Dockerfile</a></li>
+        <li><a href="#43-动手操控">4.3 动手操控</a>
+          <ol>
+            <li></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#五dockercompose">五，DockerCompose</a>
+      <ol>
+        <li><a href="#51-简介">5.1 简介</a></li>
+        <li><a href="#52-centos7安装dockercompose">5.2 CentOS7安装DockerCompose</a>
+          <ol>
+            <li><a href="#下载">下载</a></li>
+            <li><a href="#修改文件权限">修改文件权限</a></li>
+            <li><a href="#base自动补全命令">Base自动补全命令：</a></li>
+          </ol>
+        </li>
+        <li><a href="#53-部署微服务项目">5.3 部署微服务项目</a></li>
+      </ol>
+    </li>
+    <li><a href="#六-docker镜像仓库">六 Docker镜像仓库</a>
+      <ol>
+        <li><a href="#61简化版镜像仓库">6.1.简化版镜像仓库</a></li>
+        <li><a href="#62带有图形化界面版本">6.2.带有图形化界面版本</a></li>
+        <li><a href="#63配置docker信任地址">6.3.配置Docker信任地址</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

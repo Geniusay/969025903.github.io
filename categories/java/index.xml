@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Java on Genius</title>
-        <link>https://geniusBlog.github.io/categories/java/</link>
+        <link>https://969025903.github.io/969025903-github.io/categories/java/</link>
         <description>Recent content in Java on Genius</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 08 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://geniusBlog.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 08 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://969025903.github.io/969025903-github.io/categories/java/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>InnoDB</title>
-        <link>https://geniusBlog.github.io/p/innodb/</link>
+        <link>https://969025903.github.io/969025903-github.io/p/innodb/</link>
         <pubDate>Thu, 08 Sep 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://geniusBlog.github.io/p/innodb/</guid>
-        <description>&lt;img src="https://geniusBlog.github.io/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w.jpg" alt="Featured image of post InnoDB" /&gt;&lt;h1 id=&#34;innodb&#34;&gt;InnoDB&lt;/h1&gt;
+        <guid>https://969025903.github.io/969025903-github.io/p/innodb/</guid>
+        <description>&lt;img src="https://969025903.github.io/969025903-github.io/p/innodb/v2-e0360b28961d06cde03d2a06deed851a_720w.jpg" alt="Featured image of post InnoDB" /&gt;&lt;h1 id=&#34;innodb&#34;&gt;InnoDB&lt;/h1&gt;
 &lt;h2 id=&#34;一innodb引擎&#34;&gt;一，InnoDB引擎&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://mynoteimages.oss-cn-hangzhou.aliyuncs.com/20220905075626729.png&#34;
 	
@@ -919,11 +919,11 @@
         </item>
         <item>
         <title>JUC并发编程-从入门到单线程</title>
-        <link>https://geniusBlog.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/</link>
+        <link>https://969025903.github.io/969025903-github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/</link>
         <pubDate>Thu, 08 Sep 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://geniusBlog.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/</guid>
-        <description>&lt;img src="https://geniusBlog.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/bk1.jpg" alt="Featured image of post JUC并发编程-从入门到单线程" /&gt;&lt;h1 id=&#34;并发juc&#34;&gt;并发JUC&lt;/h1&gt;
+        <guid>https://969025903.github.io/969025903-github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/</guid>
+        <description>&lt;img src="https://969025903.github.io/969025903-github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%8D%95%E7%BA%BF%E7%A8%8B/bk1.jpg" alt="Featured image of post JUC并发编程-从入门到单线程" /&gt;&lt;h1 id=&#34;并发juc&#34;&gt;并发JUC&lt;/h1&gt;
 &lt;h2 id=&#34;1-并发编程&#34;&gt;1 并发编程&lt;/h2&gt;
 &lt;h3 id=&#34;11-并发编程的优缺点&#34;&gt;1.1 并发编程的优缺点&lt;/h3&gt;
 &lt;h4 id=&#34;优点&#34;&gt;优点：&lt;/h4&gt;

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>微服务 on Genius</title>
-        <link>https://969025903.github.io/969025903-github.io/969025903-github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+        <link>https://969025903.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
         <description>Recent content in 微服务 on Genius</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 06 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://969025903.github.io/969025903-github.io/969025903-github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 06 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://969025903.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Docker工具使用</title>
-        <link>https://969025903.github.io/969025903-github.io/969025903-github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</link>
+        <link>https://969025903.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Tue, 06 Sep 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://969025903.github.io/969025903-github.io/969025903-github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</guid>
-        <description>&lt;img src="https://969025903.github.io/969025903-github.io/969025903-github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3.jpg" alt="Featured image of post Docker工具使用" /&gt;&lt;h1 id=&#34;docker&#34;&gt;Docker&lt;/h1&gt;
+        <guid>https://969025903.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;img src="https://969025903.github.io/p/docker%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/bk3.jpg" alt="Featured image of post Docker工具使用" /&gt;&lt;h1 id=&#34;docker&#34;&gt;Docker&lt;/h1&gt;
 &lt;h2 id=&#34;一初始docker&#34;&gt;一，初始Docker&lt;/h2&gt;
 &lt;h3 id=&#34;11-出现的问题&#34;&gt;1.1 出现的问题&lt;/h3&gt;
 &lt;p&gt;早期项目部署十分复杂，不同的操作系统，繁多的组件，兼容性问题等等，都是需要解决的&lt;/p&gt;
